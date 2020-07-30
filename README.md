@@ -1,4 +1,4 @@
-# Spark-Kafka-Stream-Example
+# Spark  Kafka  Integratioin
 # Kafka Custom Serializable and Deserializer
 
 This repo contains the Example of Spark using Apache Kafka.
