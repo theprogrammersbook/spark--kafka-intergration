@@ -7,6 +7,7 @@ This repo contains the Example of Spark using Apache Kafka.
         Spark Version :- 2.4.6
         Scala Version :- 2.11.11
         Lift Json Version :- 2.6.2
+        Kafka : 2.4.1
 
 We are Feeding Case class Object to Apache Kafka via Kafka Producer and Fetching the same via KafkaConsumer
 we can test these behaviour on the package : `custom`

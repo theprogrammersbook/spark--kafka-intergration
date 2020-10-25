@@ -18,17 +18,27 @@ object SparkWithKafka {
         .option("kafka.bootstrap.servers", broker)
         .option("subscribe", topic)
         .load()
-        .select(col("value").as[String])
 
-      val sampleDS = completeDS.limit(50)
-      val schema = spark.read.json(sampleDS).schema
-      reader.format("kafka")
+        completeDS.show()
+   /// Value is like : 7B 22 69 64 22 3...
+     val theCompleteDS = completeDS.select(col("value").as[String])
+      println("asString")
+      theCompleteDS.show()
+       val castedTOString = completeDS.withColumn("value",col("value").cast("string"))
+      // Value is : {"id":1002,"perso...
+      println("Cased to String")
+      castedTOString.show(false)
+      val schema = spark.read.json(theCompleteDS).schema
+      println(schema.toString())
+     val afterReading= reader.format("kafka")
         .option("kafka.bootstrap.servers", broker)
         .option("subscribe", topic)
         .option("startingOffsets", startingOffsets)
         .load()
-        .withColumn("value", from_json(col("value").cast("string"), schema))
-        .select(col("value.*"))
+       // .withColumn("value", from_json(col("value").cast("string"), schema))
+      println("afterReading")
+      afterReading.show()
+      afterReading.select(col("value").cast("string")).withColumn("value",from_json(col("value"),schema)).select("value.*")
     }
   }
 
@@ -36,7 +46,9 @@ object SparkWithKafka {
 
     def writeToKafka(broker: String, topic: String): Unit = {
 
-      dataFrame.select(to_json(struct("*")) as 'value)
+      val dfJSON = dataFrame.select(to_json(struct("*")) as 'value)
+      dfJSON.show(false)
+      dfJSON
         .write
         .format("kafka")
         .option("kafka.bootstrap.servers", broker)

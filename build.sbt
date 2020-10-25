@@ -1,4 +1,4 @@
-name := "Spark-Kafka-CustomStream"
+name := "spark-kafka-integration"
 
 version := "1.0"
 

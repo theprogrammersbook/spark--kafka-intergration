@@ -10,13 +10,22 @@ object KafkaSparkSqlStreaming {
 
   def main(args: Array[String]): Unit = {
     @transient val spark: SparkSession = SparkSession.builder().config(ConfigLoader.sparkConf).getOrCreate()
+
     import spark.implicits._
+
     val records = spark.
       readStream.
       format("kafka").
       option("subscribepattern", "persons").
+    //.option("subscribePattern", "topic.*")
+    //subscribe	A comma-separated list of topics	The topic list to subscribe. Only one of "assign", "subscribe" or
+      // "subscribePattern" options can be specified for Kafka source.
       option("kafka.bootstrap.servers", "localhost:9092").
+    /*
+    "latest" for streaming, "earliest" for batch
+     */
       option("startingoffsets", "latest").
+    //Use maxOffsetsPerTrigger option to limit the number of records to fetch per trigger.
       option("maxOffsetsPerTrigger", 10).
       load
 
